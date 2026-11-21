@@ -32,7 +32,7 @@ addKapitel("Glossar", {
   ],
   [
    "Liquidation",
-   "Zwangsschließung einer Hebelposition, wenn die Margin nicht mehr reicht.",
+   "Zwangsschließung einer Hebelposition, wenn die Margin nicht mehr reicht. Wo viele Liquidationen liegen könnten, zeigt eine Liquidation Heatmap, z. B. bei CoinGlass (coinglass.com → Liquidation Heatmap). Achtung: Die Heatmap ist eine Schätzung, keine echte Positionsliste.",
    null
   ],
   [
@@ -42,13 +42,13 @@ addKapitel("Glossar", {
   ],
   [
    "Fair Value Gap (FVG)",
-   "Lücke zwischen Docht von Kerze 1 und Docht von Kerze 3 bei einer starken Bewegung. Wird oft später wieder angelaufen.",
-   null
+   "Lücke nach einer starken Bewegung: Zwischen dem Hoch von Kerze 1 und dem Tief von Kerze 3 wurde kaum gehandelt. Der Kurs läuft diese Zone oft später wieder an. Im Bild ist die Lücke gelb markiert.",
+   "fvg"
   ],
   [
    "Fibonacci (Fib)",
    "Retracement-Level (0,382 / 0,5 / 0,618 / 0,786) für mögliche Rücksetzer-Ziele.",
-   null
+   "fib"
   ],
   [
    "Long / Short",
@@ -67,12 +67,12 @@ addKapitel("Glossar", {
   ],
   [
    "Slippage",
-   "Differenz zwischen erwartetem und tatsächlichem Ausführungspreis.",
+   "Differenz zwischen erwartetem und tatsächlichem Ausführungspreis. Vor allem bei Market-Orders, schnellen Bewegungen und News wird man oft schlechter ausgeführt als geplant. Man startet dann schon im Minus, und auch der Stop kann schlechter ausgeführt werden als gesetzt. Limit-Orders verhindern Slippage beim Einstieg.",
    null
   ],
   [
    "Volumen",
-   "Gehandelte Menge in einem Zeitraum. Bestätigt Bewegungen.",
+   "Gehandelte Menge in einem Zeitraum. Hohes Volumen heißt: Viele Teilnehmer machen mit, die Bewegung ist ernst gemeint und eher tragfähig, z. B. bei einem Ausbruch. Niedriges Volumen heißt: wenig Interesse, Bewegungen sind schwach und kippen leichter, Ausbrüche scheitern öfter. Volumenspitzen markieren oft das Ende einer Bewegung (Kapitulation).",
    null
   ],
   [

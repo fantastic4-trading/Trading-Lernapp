@@ -38,7 +38,7 @@ addKapitel("Strategien", {
   [
    "Fair Value Gap (FVG)",
    "Ungleichgewicht nach einer starken Bewegung: Lücke zwischen dem Docht von Kerze 1 und Kerze 3. Der Kurs läuft sie oft wieder an. Einstieg in der Lücke, Stop dahinter.",
-   null
+   "fvg"
   ],
   [
    "Order Block",

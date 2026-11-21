@@ -7,17 +7,17 @@ addKapitel("Trends", {
  "cards": [
   [
    "Aufwärtstrend",
-   "Höhere Hochs (HH) und höhere Tiefs (HL). Long-Einstiege bevorzugt an den Tiefs.",
+   "Höhere Hochs (HH) und höhere Tiefs (HL). Long-Einstiege bevorzugt an den höheren Tiefs. Der Trend gilt, solange das letzte HL nicht unterschritten wird.",
    "up"
   ],
   [
    "Abwärtstrend",
-   "Tiefere Hochs (LH) und tiefere Tiefs (LL). Short-Einstiege bevorzugt an den Hochs.",
+   "Tiefere Hochs (LH) und tiefere Tiefs (LL). Short-Einstiege bevorzugt an den tieferen Hochs. Der Trend gilt, solange das letzte LH nicht überschritten wird.",
    "down"
   ],
   [
    "Range / Seitwärts",
-   "Kurs pendelt zwischen Unterstützung und Widerstand. Kaufen unten, verkaufen oben, bis ein Ausbruch kommt.",
+   "Kurs pendelt zwischen Unterstützung (unten, hier kaufen die Käufer) und Widerstand (oben, hier verkaufen die Verkäufer). Kaufen unten, verkaufen oben, bis ein Ausbruch kommt.",
    "range"
   ],
   [
@@ -27,13 +27,13 @@ addKapitel("Trends", {
   ],
   [
    "Break of Structure (BOS)",
-   "Der Kurs bricht ein letztes Hoch (im Aufwärtstrend) bzw. Tief: der Trend setzt sich fort.",
-   null
+   "Der Kurs bricht im Aufwärtstrend über das letzte Hoch (bzw. im Abwärtstrend unter das letzte Tief): Der Trend setzt sich fort. Im Bild: Das letzte Hoch wird überschritten, ein neues höheres Hoch entsteht.",
+   "bos"
   ],
   [
    "Change of Character (CHoCH)",
-   "Erster Bruch gegen den Trend, z. B. ein höheres Tief wird unterschritten: mögliche Trendwende.",
-   null
+   "Erster Bruch gegen den Trend: Im Aufwärtstrend wird das letzte höhere Tief (HL) unterschritten. Im Bild kippt der Aufwärtstrend so in eine mögliche Trendwende nach unten.",
+   "choch"
   ],
   [
    "Zeiteinheiten",

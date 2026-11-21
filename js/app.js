@@ -9,9 +9,14 @@ if(k=='breakout')s+='<line x1="0" y1="44" x2="100" y2="44" stroke="#94a3b8" stro
 if(k=='fib'){[[0,10],[0.382,40.6],[0.5,50],[0.618,59.4],[0.786,72.9],[1,90]].forEach(([f,y])=>{s+=`<line x1="45" y1="${y}" x2="100" y2="${y}" stroke="${f>=0.618&&f<=0.786?'#eab308':'#475569'}" stroke-dasharray="2"/><text x="88" y="${y-1}" fill="#94a3b8" font-size="5">${f}</text>`});}
 if(k=='range')s+='<line x1="0" y1="25" x2="100" y2="25" stroke="#94a3b8" stroke-dasharray="3"/><line x1="0" y1="72" x2="100" y2="72" stroke="#94a3b8" stroke-dasharray="3"/>';return s+'</svg>';}
 function patternSVG(k){const P=PATTERNS[k];let s='<svg viewBox="0 0 100 100" width="240" height="160">';
-(P.h||[]).forEach(([y,t])=>{s+=`<line x1="0" y1="${y}" x2="100" y2="${y}" stroke="#eab308" stroke-dasharray="3"/><text x="2" y="${y-2}" fill="#eab308" font-size="6">${t}</text>`});
+(P.r||[]).forEach(([x,y,w,h,c,t])=>{s+=`<rect x="${x}" y="${y}" width="${w}" height="${h}" fill="${c}"/>`+(t?`<text x="${x+1}" y="${y+h/2+2}" fill="#eab308" font-size="6">${t}</text>`:'')});
+(P.h||[]).forEach(([y,t,u])=>{s+=`<line x1="0" y1="${y}" x2="100" y2="${y}" stroke="#eab308" stroke-dasharray="3"/><text x="2" y="${u?y+7:y-2}" fill="#eab308" font-size="6">${t}</text>`});
 (P.l||[]).forEach(([a,b,c,d])=>{s+=`<line x1="${a}" y1="${b}" x2="${c}" y2="${d}" stroke="#94a3b8" stroke-dasharray="3"/>`});
-return s+`<polyline points="${P.p}" fill="none" stroke="#3b82f6" stroke-width="2"/></svg>`;}
+(P.l2||[]).forEach(([a,b,c,d,col])=>{s+=`<line x1="${a}" y1="${b}" x2="${c}" y2="${d}" stroke="${col}" stroke-dasharray="3"/>`});
+if(P.p)s+=`<polyline points="${P.p}" fill="none" stroke="${P.col||'#3b82f6'}" stroke-width="2"/>`;
+(P.k||[]).forEach(([x,o,h,l,c])=>{const col=c<o?'#22c55e':'#ef4444';s+=`<line x1="${x}" y1="${h}" x2="${x}" y2="${l}" stroke="${col}" stroke-width="1.2"/><rect x="${x-5}" y="${Math.min(o,c)}" width="10" height="${Math.max(1,Math.abs(c-o))}" fill="${col}"/>`});
+(P.t||[]).forEach(([x,y,t,c])=>{s+=`<text x="${x}" y="${y}" text-anchor="middle" fill="${c||'#e2e8f0'}" font-size="6" font-weight="bold">${t}</text>`});
+return s+'</svg>';}
 function pic(k){return !k?'':(CANDLES[k]?candleSVG(k):(typeof PATTERNS!=='undefined'&&PATTERNS[k]?patternSVG(k):trendSVG(k)));}
 const LV=['','Einsteiger','Fortgeschritten','Profi'],PASS=0.8;
 function pct(t){return score[t]===undefined?0:score[t]/DATA[t].quiz.length;}
@@ -28,7 +33,7 @@ function cards(t,i,back){const c=DATA[t].cards[i],n=DATA[t].cards.length;app.inn
 <button class="alt" onclick="cards('${t}',${Math.max(0,i-1)})">◀</button><button onclick="${i+1<n?`cards('${t}',${i+1})`:`quiz('${t}',0,0)`}">${i+1<n?'▶':'Zum Quiz'}</button><button class="alt" onclick="home()">Start</button>`;}
 function quiz(t,i,p){const q=DATA[t].quiz;if(i>=q.length){if(score[t]===undefined||p>score[t]){score[t]=p;localStorage.setItem('tradingScore',JSON.stringify(score));}
 app.innerHTML=`<h2>${t}</h2><div class="card">Ergebnis: ${p}/${q.length}</div><button onclick="quiz('${t}',0,0)">Nochmal</button><button class="alt" onclick="home()">Start</button>`;return;}
-const [f,o,r]=q[i];app.innerHTML=`<h2>${t}</h2><p class="small">Frage ${i+1}/${q.length}</p><div class="card">${f}</div>`+o.map((x,k)=>`<button class="opt alt" id="o${k}">${x}</button>`).join('');
+const [f,o,r]=q[i];app.innerHTML=`<h2>${t}</h2><p class="small">Frage ${i+1}/${q.length}</p><div class="card">${f}</div>`+o.map((x,k)=>`<button class="opt alt" id="o${k}">${x}</button>`).join('')+`<button class="alt" style="margin-top:14px" onclick="if(confirm('Quiz abbrechen? Der Fortschritt dieses Durchgangs geht verloren.'))home()">✖ Abbrechen</button>`;
 o.forEach((x,k)=>document.getElementById('o'+k).onclick=()=>{document.querySelectorAll('.opt').forEach(b=>b.disabled=true);document.getElementById('o'+r).classList.add('ok');if(k!==r)document.getElementById('o'+k).classList.add('bad');setTimeout(()=>quiz(t,i+1,p+(k===r?1:0)),1300);});}
 function lookup(){app.innerHTML=`<h2>Nachschlagen</h2><input id="s" placeholder="z. B. Funding, OI, Hammer …"><div id="r"></div><button class="alt" onclick="home()">Start</button>`;
 const all=[];for(const t in DATA)DATA[t].cards.forEach(c=>all.push([t,...c]));const r=document.getElementById('r');

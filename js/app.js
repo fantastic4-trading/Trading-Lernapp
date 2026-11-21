@@ -62,7 +62,12 @@ Stop-Abstand (%)<input id="gs" type="number" value="0.35" step="0.05">Gebühr Ei
 ['gs','ge','ga','gc'].forEach(i=>document.getElementById(i).oninput=fees);fees();
 ['dp','da','ds'].forEach(i=>document.getElementById(i).oninput=dca);dca();
 ['k','r','e','s','c'].forEach(i=>document.getElementById(i).oninput=calc);['zk','zr','zc','zq','zw','zn'].forEach(i=>document.getElementById(i).oninput=zins);
-['n','q','r','c','k'].forEach(i=>document.getElementById(i).addEventListener('input',sim));calc();sim();zins();}
+['n','q','r','c','k'].forEach(i=>document.getElementById(i).addEventListener('input',sim));calc();sim();zins();
+let open1=null;try{open1=localStorage.getItem('rechnerOffen')}catch(e){}
+document.querySelectorAll('#app > .card').forEach((c,n)=>{const b=c.querySelector('b');if(!b)return;const d=document.createElement('details');d.className='card';d.style.textAlign='left';
+const s=document.createElement('summary');s.appendChild(b);d.appendChild(s);const br=c.firstChild;if(br&&br.nodeName==='BR')br.remove();while(c.firstChild)d.appendChild(c.firstChild);
+if(String(n)===open1)d.open=true;d.ontoggle=()=>{if(d.open){document.querySelectorAll('#app > details').forEach(x=>{if(x!==d)x.open=false});try{localStorage.setItem('rechnerOffen',n)}catch(e){}}};c.replaceWith(d);});
+const hint=document.createElement('p');hint.className='small';hint.textContent='Tippe auf einen Rechner, um ihn auf- oder zuzuklappen.';document.querySelector('#app h2').after(hint);}
 const v=i=>parseFloat(document.getElementById(i).value)||0,eur=x=>x.toLocaleString('en-US',{style:'currency',currency:'USD'});
 function calc(){const k=v('k'),r=v('r'),e=v('e'),s=v('s'),c=v('c');const risk=k*r/100,d=Math.abs(e-s),qty=d?risk/d:0,tp=e>s?e+d*c:e-d*c;
 document.getElementById('o1').innerHTML=`<p>Risiko pro Trade: <b>${eur(risk)}</b><br>Möglicher Gewinn: <b style="color:#22c55e">${eur(risk*c)}</b><br>Positionsgröße: <b>${qty.toFixed(4)} Stück</b> (Wert ${eur(qty*e)})<br>Take-Profit bei: <b>${tp.toFixed(2)}</b><br>Richtung: ${e>s?'Long':'Short'}<br>Break-even-Trefferquote: <b>${(100/(1+c)).toFixed(1)} %</b></p>`;}

@@ -52,6 +52,26 @@ addKapitel("Typische Anfängerfehler", {
    "Kein Journal",
    "Ohne Aufzeichnung weißt du nie, was funktioniert und was nicht.",
    null
+  ],
+  [
+   "Margin auf Cross statt Isolated",
+   "Einer der teuersten Anfängerfehler: Vor dem ersten Trade den Margin-Modus prüfen und auf Isolated (isoliert) stellen, z. B. bei Bitunix direkt im Orderfenster. Bei Cross haftet bei einem Verlust das gesamte Futures-Guthaben bis zur Liquidation, nicht nur der eine Trade.",
+   null
+  ],
+  [
+   "Cross vs. Isolated",
+   "Cross: Das ganze Konto dient als Sicherheit für alle offenen Positionen. Läuft ein Trade stark gegen dich, kann er das komplette Konto aufbrauchen. Isolated: Jede Position hat ihre eigene, feste Margin. Wird sie liquidiert, ist nur diese Margin weg, der Rest des Kontos bleibt geschützt. Faustregel: Cross verbrennt das ganze Konto, Isolated nur den einen Trade.",
+   null
+  ],
+  [
+   "Multi-Trades und DCA",
+   "Bei Bitunix lässt sich einstellen, ob mehrere Trades im selben Markt getrennt geführt werden (Multi-Trades an) oder ob neue Orders in dieselbe Position laufen (Multi-Trades aus). Ist Multi-Trades an, startet jede Order einen eigenen Trade mit eigenem Stop. Ist es aus, werden Nachkäufe mit der bestehenden Position zusammengelegt, der Einstiegspreis wird gemittelt: So funktioniert DCA. Die Bezeichnungen können sich je nach Börse und App-Version unterscheiden.",
+   null
+  ],
+  [
+   "Einstellungen vor dem ersten Trade",
+   "Margin-Modus (Isolated), Hebel, Positionsmodus bzw. Multi-Trades und die Größeneinheit (Coin oder USDT) prüfen. Diese Einstellungen gelten oft je Markt, also für BTC und ETH getrennt.",
+   null
   ]
  ],
  "quiz": [
@@ -79,6 +99,33 @@ addKapitel("Typische Anfängerfehler", {
     "Das CRV passt nicht mehr",
     "Gebühren steigen",
     "Gar nicht"
+   ],
+   0
+  ],
+  [
+   "Welcher Margin-Modus kann bei einem Verlust das ganze Konto aufbrauchen?",
+   [
+    "Isolated",
+    "Cross",
+    "Beide nicht"
+   ],
+   1
+  ],
+  [
+   "Was verlierst du bei Isolated im schlimmsten Fall?",
+   [
+    "Das ganze Konto",
+    "Nur die Margin dieses Trades",
+    "Nichts"
+   ],
+   1
+  ],
+  [
+   "Du willst per DCA nachkaufen und einen gemittelten Einstiegspreis. Multi-Trades sollte dafür …",
+   [
+    "aus sein",
+    "an sein",
+    "egal sein"
    ],
    0
   ]

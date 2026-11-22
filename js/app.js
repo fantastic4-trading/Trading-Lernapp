@@ -26,16 +26,16 @@ s+=`<h2>${open?'🔓':'🔒'} Level ${l}: ${LV[l]}</h2>${open?'':'<p class="smal
 s+=`<h2>Werkzeuge</h2><div class="grid"><div class="card"><b>📊 Chart-Training</b><br><span class="small">Muster im Chart erkennen</span><br><button onclick="chartTrain()">Starten</button></div><div class="card"><b>📒 Journal</b><br><span class="small">Trades eintragen und auswerten</span><br><button onclick="journal()">Öffnen</button></div><div class="card"><b>✅ Trade-Checkliste</b><br><button onclick="check()">Öffnen</button></div><div class="card"><b>🧮 Rechner</b><br><span class="small">Risiko · CRV · Zinseszins · DCA · Gebühren</span><br><button onclick="tools()">Öffnen</button></div><div class="card"><b>Nachschlagen</b><br><button onclick="lookup()">Suche</button></div></div>
 <p class="small">Nur zu Lernzwecken, keine Anlageberatung. <a href="#" style="color:#64748b" onclick="localStorage.setItem('alleFrei',1);home()">Lehrermodus: alles freischalten</a></p>`;app.innerHTML=s;}
 const CHECK=['Trend auf höherer Zeiteinheit bestimmt','Einstieg an einem klaren Level (Unterstützung, Fib, FVG, Liquidity Grab)','Stop-Loss dort, wo die Idee widerlegt ist','CRV mindestens 1:2, auch nach Gebühren','Positionsgröße mit 1 % Risiko berechnet','Hebel passt, Liquidationspreis liegt weit hinter dem Stop','Tages- und Wochenlimit noch nicht erreicht','Keine wichtigen US-Daten in den nächsten 30 Minuten','Kein FOMO, kein Revenge-Trade, ich bin ruhig','Trade im Journal vorbereitet'];
-function check(){app.innerHTML='<h2>Trade-Checkliste</h2><p class="small">Erst wenn alles abgehakt ist, wird der Trade freigegeben.</p><div class="card" style="text-align:left">'+CHECK.map((c,i)=>`<label style="display:block;padding:6px 0"><input type="checkbox" class="ck" style="width:auto" onchange="ckUp()"> ${c}</label>`).join('')+'</div><div id="ckr" class="card"></div><button class="alt" onclick="check()">Zurücksetzen</button><button class="alt" onclick="home()">Start</button>';ckUp();}
+function check(){app.innerHTML='<h2>Trade-Checkliste</h2><p class="small">Erst wenn alles abgehakt ist, wird der Trade freigegeben.</p><div class="card" style="text-align:left">'+CHECK.map((c,i)=>`<label style="display:block;padding:6px 0"><input type="checkbox" class="ck" style="width:auto" onchange="ckUp()"> ${c}</label>`).join('')+'</div><div id="ckr" class="card"></div><button class="alt" onclick="check()">Zurücksetzen</button><button class="alt" onclick="home()">Startseite</button>';ckUp();}
 function ckUp(){const b=[...document.querySelectorAll('.ck')],n=b.filter(x=>x.checked).length;document.getElementById('ckr').innerHTML=n==b.length?'<b style="color:#22c55e">✅ Trade freigegeben</b>':`<b style="color:#ef4444">⛔ Noch ${b.length-n} Punkte offen, kein Trade</b>`;}
-function intro(t){app.innerHTML=`<h2>${t}</h2><div class="card">${DATA[t].intro}</div><button onclick="cards('${t}',0)">Lernkarten starten</button>${t=='Risikomanagement'?'<button onclick="tools()">Rechner</button>':''}<button class="alt" onclick="home()">Start</button>`;}
+function intro(t){app.innerHTML=`<h2>${t}</h2><div class="card">${DATA[t].intro}</div><button onclick="cards('${t}',0)">Lernkarten durchblättern</button><button onclick="leitner('${t}')">🗂️ Karteikartenlernen</button>${t=='Risikomanagement'?'<button onclick="tools()">Rechner</button>':''}<button class="alt" onclick="home()">Startseite</button>`;}
 function cards(t,i,back){const c=DATA[t].cards[i],n=DATA[t].cards.length;app.innerHTML=`<h2>${t}</h2><p class="small">Karte ${i+1}/${n}, antippen zum Umdrehen</p><div class="card flip" onclick="cards('${t}',${i},${!back})"><b>${c[0]}</b><br>${pic(c[2])}${back?'<p>'+c[1]+'</p>':''}</div>
-<button class="alt" onclick="cards('${t}',${Math.max(0,i-1)})">◀</button><button onclick="${i+1<n?`cards('${t}',${i+1})`:`quiz('${t}',0,0)`}">${i+1<n?'▶':'Zum Quiz'}</button><button class="alt" onclick="home()">Start</button>`;}
+<button class="alt" onclick="cards('${t}',${Math.max(0,i-1)})">◀</button><button onclick="${i+1<n?`cards('${t}',${i+1})`:`quiz('${t}',0,0)`}">${i+1<n?'▶':'Zum Quiz'}</button><button class="alt" onclick="home()">Startseite</button>`;}
 function quiz(t,i,p){const q=DATA[t].quiz;if(i>=q.length){if(score[t]===undefined||p>score[t]){score[t]=p;localStorage.setItem('tradingScore',JSON.stringify(score));}
-app.innerHTML=`<h2>${t}</h2><div class="card">Ergebnis: ${p}/${q.length}</div><button onclick="quiz('${t}',0,0)">Nochmal</button><button class="alt" onclick="home()">Start</button>`;return;}
+app.innerHTML=`<h2>${t}</h2><div class="card">Ergebnis: ${p}/${q.length}</div><button onclick="quiz('${t}',0,0)">Nochmal</button><button class="alt" onclick="home()">Startseite</button>`;return;}
 const [f,o,r]=q[i];app.innerHTML=`<h2>${t}</h2><p class="small">Frage ${i+1}/${q.length}</p><div class="card">${f}</div>`+o.map((x,k)=>`<button class="opt alt" id="o${k}">${x}</button>`).join('')+`<button class="alt" style="margin-top:14px" onclick="if(confirm('Quiz abbrechen? Der Fortschritt dieses Durchgangs geht verloren.'))home()">✖ Abbrechen</button>`;
 o.forEach((x,k)=>document.getElementById('o'+k).onclick=()=>{document.querySelectorAll('.opt').forEach(b=>b.disabled=true);document.getElementById('o'+r).classList.add('ok');if(k!==r)document.getElementById('o'+k).classList.add('bad');setTimeout(()=>quiz(t,i+1,p+(k===r?1:0)),1300);});}
-function lookup(){app.innerHTML=`<h2>Nachschlagen</h2><input id="s" placeholder="z. B. Funding, OI, Hammer …"><div id="r"></div><button class="alt" onclick="home()">Start</button>`;
+function lookup(){app.innerHTML=`<h2>Nachschlagen</h2><input id="s" placeholder="z. B. Funding, OI, Hammer …"><div id="r"></div><button class="alt" onclick="home()">Startseite</button>`;
 const all=[];for(const t in DATA)DATA[t].cards.forEach(c=>all.push([t,...c]));const r=document.getElementById('r');
 const show=q=>{r.innerHTML=all.filter(a=>(a[1]+a[2]).toLowerCase().includes(q.toLowerCase())).map(a=>`<div class="g"><b>${a[1]}</b> <span class="small">(${a[0]})</span><br>${a[2]}</div>`).join('');};
 document.getElementById('s').oninput=e=>show(e.target.value);show('');}
@@ -58,7 +58,7 @@ Kaufkurse (durch Komma getrennt)<input id="dp" value="50, 40, 30">Betrag pro Kau
 <div class="card" style="text-align:left"><b>5. Gebühren-Rechner</b><br>
 Stop-Abstand (%)<input id="gs" type="number" value="0.35" step="0.05">Gebühr Einstieg (%)<input id="ge" type="number" value="0.06" step="0.01">Gebühr Ausstieg (%)<input id="ga" type="number" value="0.06" step="0.01">CRV brutto (Gewinn : 1)<input id="gc" type="number" value="2" step="0.5"><div id="o5"></div>
 <p class="small">Typisch: Limit/Maker ca. 0,02 %, Market/Taker ca. 0,05–0,06 % je Seite. Die Gebühr fällt auf den Positionswert an. Je enger der Stop, desto größer die Position und desto teurer der Trade in R.</p></div>
-<button class="alt" onclick="home()">Start</button>`;
+<button class="alt" onclick="home()">Startseite</button>`;
 ['gs','ge','ga','gc'].forEach(i=>document.getElementById(i).oninput=fees);fees();
 ['dp','da','ds'].forEach(i=>document.getElementById(i).oninput=dca);dca();
 ['k','r','e','s','c'].forEach(i=>document.getElementById(i).oninput=calc);['zk','zr','zc','zq','zw','zn'].forEach(i=>document.getElementById(i).oninput=zins);
@@ -114,7 +114,7 @@ const w=c.length*12+10;let s=`<svg viewBox="0 0 ${w} 110" style="width:100%;max-
 c.forEach(([o,h,l,cl],i)=>{const x=6+i*12,col=cl>=o?'#22c55e':'#ef4444',y=v=>105-v;s+=`<line x1="${x+4}" y1="${y(h)}" x2="${x+4}" y2="${y(l)}" stroke="${col}"/><rect x="${x}" y="${y(Math.max(o,cl))}" width="8" height="${Math.max(1,Math.abs(cl-o))}" fill="${col}"/>`});return s+'</svg>';}
 let ct={n:0,ok:0};
 function chartTrain(){const ks=Object.keys(PAT),k=ks[Math.floor(Math.random()*ks.length)];const opts=[k,...ks.filter(x=>x!=k).sort(()=>Math.random()-.5).slice(0,2)].sort(()=>Math.random()-.5);
-app.innerHTML=`<h2>Chart-Training</h2><p class="small">Was siehst du? Richtig: ${ct.ok}/${ct.n}</p><div class="card">${chartSVG(k)}</div>`+opts.map(o=>`<button class="opt alt" id="c_${o}">${PAT[o]}</button>`).join('')+'<div id="cr"></div><button class="alt" onclick="home()">Start</button>';
+app.innerHTML=`<h2>Chart-Training</h2><p class="small">Was siehst du? Richtig: ${ct.ok}/${ct.n}</p><div class="card">${chartSVG(k)}</div>`+opts.map(o=>`<button class="opt alt" id="c_${o}">${PAT[o]}</button>`).join('')+'<div id="cr"></div><button class="alt" onclick="home()">Startseite</button>';
 opts.forEach(o=>document.getElementById('c_'+o).onclick=()=>{document.querySelectorAll('.opt').forEach(b=>b.disabled=true);ct.n++;if(o==k)ct.ok++;document.getElementById('c_'+k).classList.add('ok');if(o!=k)document.getElementById('c_'+o).classList.add('bad');
 document.getElementById('cr').innerHTML=`<div class="card">${PEXP[k]}</div><button onclick="chartTrain()">Nächster Chart</button>`;});}
 
@@ -132,7 +132,7 @@ Art<select id="ja" style="width:100%;padding:10px;border-radius:8px"><option>Pap
 Ergebnis in R (z. B. 3 oder -1)<input id="jx" type="number" step="0.1">Ergebnis in $ (optional)<input id="ju" type="number" step="0.01">Notiz / Gefühl<input id="jn">
 <button onclick="jAdd()">Speichern</button></div>
 <div class="card" style="text-align:left">${j.slice().reverse().map((t,i)=>`<div class="g">${t.d} · ${t.m} · ${t.dir} · ${t.s} · ${t.a} · <b style="color:${t.r>0?'#22c55e':'#ef4444'}">${t.r}R</b> ${t.n?'· '+t.n:''} <a href="#" style="color:#64748b" onclick="jDel(${n-1-i})">löschen</a></div>`).join('')}</div>
-<button class="alt" onclick="jCsv()">Als CSV für Excel exportieren</button><button class="alt" onclick="home()">Start</button>`;
+<button class="alt" onclick="jCsv()">Als CSV für Excel exportieren</button><button class="alt" onclick="home()">Startseite</button>`;
 if(n){const eq=[0];j.forEach(t=>eq.push(eq[eq.length-1]+t.r));const cv=document.getElementById('jc'),x=cv.getContext('2d'),mx=Math.max(...eq,1),mn=Math.min(...eq,-1),Y=y=>170-(y-mn)/(mx-mn)*160;
 x.strokeStyle='#475569';x.beginPath();x.moveTo(0,Y(0));x.lineTo(700,Y(0));x.stroke();x.strokeStyle='#3b82f6';x.lineWidth=2;x.beginPath();eq.forEach((y,i)=>{const X=10+i/(eq.length-1||1)*680;i?x.lineTo(X,Y(y)):x.moveTo(X,Y(y));});x.stroke();x.fillStyle='#94a3b8';x.fillText('Kontokurve in R',10,14);}}
 function jAdd(){const g=i=>document.getElementById(i).value,r=parseFloat(g('jx'));if(isNaN(r)){alert('Bitte Ergebnis in R eintragen');return;}
@@ -141,4 +141,27 @@ function jDel(i){if(!confirm('Trade löschen?'))return;const j=J();j.splice(i,1)
 function jCsv(){const rows=[['Datum','Markt','Richtung','Setup','Art','R','USD','Notiz'],...J().map(t=>[t.d,t.m,t.dir,t.s,t.a,String(t.r).replace('.',','),String(t.usd).replace('.',','),t.n])];
 const csv='\ufeff'+rows.map(r=>r.map(x=>'"'+String(x??'').replace(/"/g,'""')+'"').join(';')).join('\n');const l=document.createElement('a');l.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));l.download='trading-journal.csv';l.click();}
 
+
+// ---------- Karteikartenlernen (Leitner-Prinzip) ----------
+// Fach 1 = neu/nicht gewusst, Fach 2 = einmal gewusst, Fach 3 = sicher. Fortschritt bleibt im Browser gespeichert.
+const LK=t=>'leitner_'+t;
+function lLoad(t){let b={};try{b=JSON.parse(localStorage.getItem(LK(t))||'{}')}catch(e){}return b;}
+function lSave(t,b){try{localStorage.setItem(LK(t),JSON.stringify(b))}catch(e){}}
+let LS=null;
+function leitner(t){const b=lLoad(t),n=DATA[t].cards.length,idx=[...Array(n).keys()];
+// Sitzung: zuerst Fach 1, dann Fach 2, dann Fach 3; innerhalb eines Fachs gemischt
+idx.sort((x,y)=>((b[x]||1)-(b[y]||1))||(Math.random()-.5));
+LS={t,q:idx,done:0,wrong:0};lShow(false);}
+function lCounts(t){const b=lLoad(t),c=[0,0,0,0];DATA[t].cards.forEach((_,i)=>c[b[i]||1]++);return c;}
+function lShow(back){const {t,q}=LS;const c=lCounts(t);
+const head=`<h2>${t}: Karteikarten</h2><p class="small">Fach 1: <b>${c[1]}</b> · Fach 2: <b>${c[2]}</b> · Fach 3 (sicher): <b style="color:#22c55e">${c[3]}</b> · noch ${q.length} in dieser Runde</p>`;
+if(!q.length){app.innerHTML=head+`<div class="card">🎉 Runde geschafft! Alle Karten dieser Runde gewusst.<br><span class="small">${LS.wrong} Mal „nicht gewusst“ – diese Karten liegen wieder in Fach 1.</span></div><button onclick="leitner('${t}')">Neue Runde</button><button class="alt" onclick="if(confirm('Alle Karten wieder in Fach 1 legen?')){lSave('${t}',{});leitner('${t}')}">Fächer zurücksetzen</button><button class="alt" onclick="intro('${t}')">Zum Kapitel</button><button class="alt" onclick="home()">Startseite</button>`;return;}
+const i=q[0],k=DATA[t].cards[i],box=lLoad(t)[i]||1;
+app.innerHTML=head+`<div class="card flip" onclick="lShow(true)"><span class="small">Fach ${box}</span><br><b>${k[0]}</b><br>${pic(k[2])}${back?'<p>'+k[1]+'</p>':'<p class="small">Erst selbst überlegen, dann antippen zum Aufdecken</p>'}</div>`+
+(back?`<button class="ok" style="width:45%" onclick="lAns(true)">✓ Gewusst</button><button class="bad" style="width:45%" onclick="lAns(false)">✗ Nicht gewusst</button>`:`<button onclick="lShow(true)">Aufdecken</button>`)+
+`<br><button class="alt" onclick="intro('${t}')">Zum Kapitel</button><button class="alt" onclick="home()">Startseite</button>`;}
+function lAns(ok){const {t,q}=LS,i=q.shift(),b=lLoad(t);
+if(ok){b[i]=Math.min(3,(b[i]||1)+1);}       // gewusst: ein Fach weiter, Karte ist aus dieser Runde raus
+else{b[i]=1;LS.wrong++;q.splice(Math.min(3,q.length),0,i);} // nicht gewusst: zurück in Fach 1, kommt nach 3 Karten wieder
+lSave(t,b);lShow(false);}
 window.addEventListener('DOMContentLoaded',home);

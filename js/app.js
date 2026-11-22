@@ -154,7 +154,7 @@ idx.sort((x,y)=>((b[x]||1)-(b[y]||1))||(Math.random()-.5));
 LS={t,q:idx,done:0,wrong:0};lShow(false);}
 function lCounts(t){const b=lLoad(t),c=[0,0,0,0];DATA[t].cards.forEach((_,i)=>c[b[i]||1]++);return c;}
 function lShow(back){const {t,q}=LS;const c=lCounts(t);
-const head=`<h2>${t}: Karteikarten</h2><p class="small">Fach 1: <b>${c[1]}</b> · Fach 2: <b>${c[2]}</b> · Fach 3 (sicher): <b style="color:#22c55e">${c[3]}</b> · noch ${q.length} in dieser Runde</p>`;
+const head=`<h2>${t}</h2><div class="chips"><span class="chip">Fach 1 (neu): ${c[1]}</span><span class="chip">Fach 2 (fast): ${c[2]}</span><span class="chip sicher">Fach 3 (sicher): ${c[3]}</span></div><p class="small">In dieser Runde noch ${q.length} Karten · Karte antippen zum Umdrehen. Nicht gewusste Karten kommen nach drei anderen wieder, gewusste seltener.</p>`;
 if(!q.length){app.innerHTML=head+`<div class="card">🎉 Runde geschafft! Alle Karten dieser Runde gewusst.<br><span class="small">${LS.wrong} Mal „nicht gewusst“ – diese Karten liegen wieder in Fach 1.</span></div><button onclick="leitner('${t}')">Neue Runde</button><button class="alt" onclick="if(confirm('Alle Karten wieder in Fach 1 legen?')){lSave('${t}',{});leitner('${t}')}">Fächer zurücksetzen</button><button class="alt" onclick="intro('${t}')">Zum Kapitel</button><button class="alt" onclick="home()">Startseite</button>`;return;}
 const i=q[0],k=DATA[t].cards[i],box=lLoad(t)[i]||1;
 app.innerHTML=head+`<div class="card flip" onclick="lShow(true)"><span class="small">Fach ${box}</span><br><b>${k[0]}</b><br>${pic(k[2])}${back?'<p>'+k[1]+'</p>':'<p class="small">Erst selbst überlegen, dann antippen zum Aufdecken</p>'}</div>`+
@@ -164,4 +164,20 @@ function lAns(ok){const {t,q}=LS,i=q.shift(),b=lLoad(t);
 if(ok){b[i]=Math.min(3,(b[i]||1)+1);}       // gewusst: ein Fach weiter, Karte ist aus dieser Runde raus
 else{b[i]=1;LS.wrong++;q.splice(Math.min(3,q.length),0,i);} // nicht gewusst: zurück in Fach 1, kommt nach 3 Karten wieder
 lSave(t,b);lShow(false);}
+
+// ---------- Kapitelansicht mit Reitern (Vorschau) ----------
+function deco(t,tab){const h=app.querySelector('h2');if(h)h.remove();
+app.querySelectorAll('button').forEach(b=>{const x=b.textContent.trim();if(x==='Startseite'||x==='Zum Kapitel'||x==='✖ Abbrechen')b.remove();});
+app.querySelectorAll('br').forEach(br=>{if(br.parentElement===app)br.remove();});
+const top=document.createElement('div');
+top.innerHTML=`<button class="alt back" onclick="home()">← Startseite</button><h2 class="ktitel">${t}</h2>
+<details class="introbox"><summary>ℹ️ Worum geht es in diesem Kapitel?</summary><p>${DATA[t].intro}</p>${t=='Risikomanagement'?'<button onclick="tools()">🧮 Zu den Rechnern</button>':''}</details>
+<div class="tabs"><button class="tab${tab=='kartei'?' on':''}" onclick="leitner('${t}')">🗂️ Karteikarten</button><button class="tab${tab=='blaettern'?' on':''}" onclick="cards('${t}',0)">📖 Durchblättern</button><button class="tab${tab=='quiz'?' on':''}" onclick="quiz('${t}',0,0)">❓ Quiz${score[t]!==undefined?' ('+score[t]+'/'+DATA[t].quiz.length+')':''}</button></div>`;
+app.prepend(top);
+if(tab=='kartei'&&LS&&LS.q.length){const r=document.createElement('button');r.className='alt reset';r.textContent='↺ Karteikasten zurücksetzen';r.onclick=()=>{if(confirm('Alle Karten wieder in Fach 1 legen?')){lSave(t,{});leitner(t)}};app.appendChild(r);}}
+const _cards=cards,_quiz=quiz,_lShow=lShow;
+cards=function(t,i,b){_cards(t,i,b);deco(t,'blaettern')};
+quiz=function(t,i,p){_quiz(t,i,p);deco(t,'quiz')};
+lShow=function(b){_lShow(b);deco(LS.t,'kartei')};
+intro=function(t){leitner(t)};
 window.addEventListener('DOMContentLoaded',home);
